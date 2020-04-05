@@ -22,6 +22,11 @@ namespace TicTacToe___Windows_Form_Application
 
         private List<Button> buttonList;
 
+        private int turnNumber;
+
+        private int xWin = 0;
+        private int oWin = 0;
+
         public TicTacToeForm()
         {
             InitializeComponent();
@@ -30,6 +35,7 @@ namespace TicTacToe___Windows_Form_Application
 
         private void Button_Click(object sender, EventArgs e)
         {
+            turnNumber++;
             Button btn = (Button)sender;
 
             if (btn.Text == "")
@@ -57,12 +63,13 @@ namespace TicTacToe___Windows_Form_Application
             if(currentPlayer == PlayerType.X)
             {
                 currentPlayer = PlayerType.O;
+                TurnLabel.Text = "O";
             }
             else
             {
                 currentPlayer = PlayerType.X;
+                TurnLabel.Text = "X";
             }
-            Console.WriteLine("Switched Player");
         }
 
         private void WinCheck()
@@ -104,7 +111,7 @@ namespace TicTacToe___Windows_Form_Application
             {
                 winner = true;
             }
-            else if((R3B1.Text == R2B2.Text) && (R2B2.Text == R3B1.Text) && R3B1.Text != "")
+            else if((R1B3.Text == R2B2.Text) && (R2B2.Text == R3B1.Text) && R3B1.Text != "")
             {
                 winner = true;
             }
@@ -117,13 +124,24 @@ namespace TicTacToe___Windows_Form_Application
 
                 if(currentPlayer == PlayerType.O)
                 {
-                    winText = "o";
+                    winText = "O";
+                    oWin++;
+                    OScoreLabel.Text = oWin.ToString();
                 }
                 else
                 {
-                    winText = "x";
+                    winText = "X";
+                    xWin++;
+                    XScoreLabel.Text = xWin.ToString();
                 }
                 MessageBox.Show("Winner: " + winText);
+            }
+            else
+            {
+                if(turnNumber == 9)
+                {
+                    MessageBox.Show("Draw!");
+                }
             }
         }
 
