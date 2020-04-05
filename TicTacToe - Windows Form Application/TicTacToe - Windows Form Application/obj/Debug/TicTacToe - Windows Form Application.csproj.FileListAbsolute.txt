@@ -8,3 +8,13 @@ C:\Users\lukeg\Desktop\Programming\C#\TicTacToe - Windows Form Application\TicTa
 C:\Users\lukeg\Desktop\Programming\C#\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe - Windows Form Application.exe
 C:\Users\lukeg\Desktop\Programming\C#\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe - Windows Form Application.pdb
 C:\Users\lukeg\Desktop\Programming\C#\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe___Windows_Form_Application.TicTacToeForm.resources
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\bin\Debug\TicTacToe - Windows Form Application.exe.config
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\bin\Debug\TicTacToe - Windows Form Application.exe
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\bin\Debug\TicTacToe - Windows Form Application.pdb
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe - Windows Form Application.csprojAssemblyReference.cache
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe___Windows_Form_Application.TicTacToeForm.resources
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe___Windows_Form_Application.Properties.Resources.resources
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe - Windows Form Application.csproj.GenerateResource.cache
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe - Windows Form Application.csproj.CoreCompileInputs.cache
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe - Windows Form Application.exe
+C:\Programming\C#\TicTacToe\TicTacToe\TicTacToe - Windows Form Application\TicTacToe - Windows Form Application\obj\Debug\TicTacToe - Windows Form Application.pdb
