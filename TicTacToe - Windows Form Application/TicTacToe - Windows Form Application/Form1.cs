@@ -20,7 +20,8 @@ namespace TicTacToe___Windows_Form_Application
     {
         private PlayerType currentPlayer = PlayerType.X;
 
-        private List<Button> buttonList;
+        //2D array representing game grid
+        private Button[,] gameGrid;
 
         private int turnNumber;
 
@@ -30,7 +31,12 @@ namespace TicTacToe___Windows_Form_Application
         public TicTacToeForm()
         {
             InitializeComponent();
-            buttonList = Controls.OfType<Button>().ToList();
+
+            //Initialise array with buttons from Form
+            gameGrid = new Button[3,3] { {R1B1, R1B2, R1B3 },
+                                         {R2B1, R2B2, R2B3 },
+                                         {R3B1, R3B2, R3B3 }};
+
         }
 
         private void Button_Click(object sender, EventArgs e)
@@ -58,12 +64,40 @@ namespace TicTacToe___Windows_Form_Application
             Application.Exit();
         }
 
+        private void playerVsPlayerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            turnNumber = 0;
+
+            //Enable and reset buttons
+            for (int i = 0; i < gameGrid.GetLength(0); i++)
+            {
+                for(int j = 0; j < gameGrid.GetLength(1); j++)
+                {
+                    gameGrid[i,j].Enabled = true;
+                    gameGrid[i,j].Text = "";
+                }
+            }
+
+            currentPlayer = PlayerType.X;
+            TurnLabel.Text = "X";
+        }
+
+        private void resetScoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            XScoreLabel.Text = 0.ToString();
+            OScoreLabel.Text = 0.ToString();
+            xWin = 0;
+            oWin = 0;
+        }
+
+        #region Custom Methods
         private void SwitchPlayer()
         {
             if(currentPlayer == PlayerType.X)
             {
                 currentPlayer = PlayerType.O;
                 TurnLabel.Text = "O";
+                AIMinMax();
             }
             else
             {
@@ -135,22 +169,34 @@ namespace TicTacToe___Windows_Form_Application
                     XScoreLabel.Text = xWin.ToString();
                 }
                 MessageBox.Show("Winner: " + winText);
+                TurnLabel.Enabled = false;
             }
             else
             {
                 if(turnNumber == 9)
                 {
                     MessageBox.Show("Draw!");
+                    TurnLabel.Enabled = false;
                 }
             }
         }
 
         private void DisableButtons()
         {
-            foreach (Button btn in buttonList)
+            //Enable and reset buttons
+            for (int i = 0; i < gameGrid.GetLength(0); i++)
             {
-                btn.Enabled = false;
+                for (int j = 0; j < gameGrid.GetLength(1); j++)
+                {
+                    gameGrid[i, j].Enabled = false;
+                }
             }
         }
+
+        private void AIMinMax()
+        {
+
+        }
+        #endregion
     }
 }

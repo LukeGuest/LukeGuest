@@ -53,6 +53,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.XScoreLabel = new System.Windows.Forms.Label();
             this.OScoreLabel = new System.Windows.Forms.Label();
+            this.resetScoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -186,6 +187,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newGameToolStripMenuItem,
+            this.resetScoreToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -197,25 +199,26 @@
             this.playerVsPlayerToolStripMenuItem,
             this.playerVsAIToolStripMenuItem});
             this.newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
-            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newGameToolStripMenuItem.Text = "New Game";
             // 
             // playerVsPlayerToolStripMenuItem
             // 
             this.playerVsPlayerToolStripMenuItem.Name = "playerVsPlayerToolStripMenuItem";
-            this.playerVsPlayerToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.playerVsPlayerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.playerVsPlayerToolStripMenuItem.Text = "Player vs Player";
+            this.playerVsPlayerToolStripMenuItem.Click += new System.EventHandler(this.playerVsPlayerToolStripMenuItem_Click);
             // 
             // playerVsAIToolStripMenuItem
             // 
             this.playerVsAIToolStripMenuItem.Name = "playerVsAIToolStripMenuItem";
-            this.playerVsAIToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.playerVsAIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.playerVsAIToolStripMenuItem.Text = "Player vs AI";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -289,6 +292,13 @@
             this.OScoreLabel.Text = "0";
             this.OScoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // resetScoreToolStripMenuItem
+            // 
+            this.resetScoreToolStripMenuItem.Name = "resetScoreToolStripMenuItem";
+            this.resetScoreToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetScoreToolStripMenuItem.Text = "Reset Score";
+            this.resetScoreToolStripMenuItem.Click += new System.EventHandler(this.resetScoreToolStripMenuItem_Click);
+            // 
             // TicTacToeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -348,6 +358,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label XScoreLabel;
         private System.Windows.Forms.Label OScoreLabel;
+        private System.Windows.Forms.ToolStripMenuItem resetScoreToolStripMenuItem;
     }
 }
 
