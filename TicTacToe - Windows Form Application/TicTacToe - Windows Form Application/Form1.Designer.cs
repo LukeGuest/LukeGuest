@@ -44,6 +44,7 @@
             this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playerVsPlayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playerVsAIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetScoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,12 +54,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.XScoreLabel = new System.Windows.Forms.Label();
             this.OScoreLabel = new System.Windows.Forms.Label();
-            this.resetScoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // R1B1
             // 
+            this.R1B1.Enabled = false;
             this.R1B1.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R1B1.Location = new System.Drawing.Point(12, 27);
             this.R1B1.Name = "R1B1";
@@ -69,6 +70,7 @@
             // 
             // R1B2
             // 
+            this.R1B2.Enabled = false;
             this.R1B2.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R1B2.Location = new System.Drawing.Point(78, 27);
             this.R1B2.Name = "R1B2";
@@ -79,6 +81,7 @@
             // 
             // R1B3
             // 
+            this.R1B3.Enabled = false;
             this.R1B3.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R1B3.Location = new System.Drawing.Point(144, 27);
             this.R1B3.Name = "R1B3";
@@ -89,6 +92,7 @@
             // 
             // R2B1
             // 
+            this.R2B1.Enabled = false;
             this.R2B1.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R2B1.Location = new System.Drawing.Point(12, 93);
             this.R2B1.Name = "R2B1";
@@ -99,6 +103,7 @@
             // 
             // R2B2
             // 
+            this.R2B2.Enabled = false;
             this.R2B2.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R2B2.Location = new System.Drawing.Point(78, 93);
             this.R2B2.Name = "R2B2";
@@ -109,6 +114,7 @@
             // 
             // R2B3
             // 
+            this.R2B3.Enabled = false;
             this.R2B3.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R2B3.Location = new System.Drawing.Point(144, 93);
             this.R2B3.Name = "R2B3";
@@ -119,6 +125,7 @@
             // 
             // R3B1
             // 
+            this.R3B1.Enabled = false;
             this.R3B1.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R3B1.Location = new System.Drawing.Point(12, 159);
             this.R3B1.Name = "R3B1";
@@ -129,6 +136,7 @@
             // 
             // R3B2
             // 
+            this.R3B2.Enabled = false;
             this.R3B2.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R3B2.Location = new System.Drawing.Point(78, 159);
             this.R3B2.Name = "R3B2";
@@ -139,6 +147,7 @@
             // 
             // R3B3
             // 
+            this.R3B3.Enabled = false;
             this.R3B3.Font = new System.Drawing.Font("Microsoft Sans Serif", 32F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.R3B3.Location = new System.Drawing.Point(144, 159);
             this.R3B3.Name = "R3B3";
@@ -168,7 +177,6 @@
             this.TurnLabel.Name = "TurnLabel";
             this.TurnLabel.Size = new System.Drawing.Size(71, 31);
             this.TurnLabel.TabIndex = 11;
-            this.TurnLabel.Text = "X";
             this.TurnLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // menuStrip1
@@ -199,26 +207,34 @@
             this.playerVsPlayerToolStripMenuItem,
             this.playerVsAIToolStripMenuItem});
             this.newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
-            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.newGameToolStripMenuItem.Text = "New Game";
             // 
             // playerVsPlayerToolStripMenuItem
             // 
             this.playerVsPlayerToolStripMenuItem.Name = "playerVsPlayerToolStripMenuItem";
-            this.playerVsPlayerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.playerVsPlayerToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.playerVsPlayerToolStripMenuItem.Text = "Player vs Player";
             this.playerVsPlayerToolStripMenuItem.Click += new System.EventHandler(this.playerVsPlayerToolStripMenuItem_Click);
             // 
             // playerVsAIToolStripMenuItem
             // 
             this.playerVsAIToolStripMenuItem.Name = "playerVsAIToolStripMenuItem";
-            this.playerVsAIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.playerVsAIToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.playerVsAIToolStripMenuItem.Text = "Player vs AI";
+            this.playerVsAIToolStripMenuItem.Click += new System.EventHandler(this.playerVsAIToolStripMenuItem_Click);
+            // 
+            // resetScoreToolStripMenuItem
+            // 
+            this.resetScoreToolStripMenuItem.Name = "resetScoreToolStripMenuItem";
+            this.resetScoreToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.resetScoreToolStripMenuItem.Text = "Reset Score";
+            this.resetScoreToolStripMenuItem.Click += new System.EventHandler(this.resetScoreToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -291,13 +307,6 @@
             this.OScoreLabel.TabIndex = 17;
             this.OScoreLabel.Text = "0";
             this.OScoreLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // resetScoreToolStripMenuItem
-            // 
-            this.resetScoreToolStripMenuItem.Name = "resetScoreToolStripMenuItem";
-            this.resetScoreToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.resetScoreToolStripMenuItem.Text = "Reset Score";
-            this.resetScoreToolStripMenuItem.Click += new System.EventHandler(this.resetScoreToolStripMenuItem_Click);
             // 
             // TicTacToeForm
             // 

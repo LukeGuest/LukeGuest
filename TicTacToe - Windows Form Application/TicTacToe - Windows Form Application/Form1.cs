@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace TicTacToe___Windows_Form_Application
 {
+    public enum MatchType
+    {
+        PlayerVPlayer,
+        PlayerVAI
+    }
+
     public enum PlayerType
     {
         x,
         o,
-        None
     }
 
     public enum WinType
@@ -35,16 +40,20 @@ namespace TicTacToe___Windows_Form_Application
 
         private PlayerType currentPlayer = PlayerType.x;
 
-        //2D array representing game grid
+        //2D array representing UI button grid
         private Button[,] buttonGrid;
+        //2D string array representing the current game state
         private string[,] gameGrid = new string[3,3];
 
-        private int turnNumber;
-
+        //Storing how many times x and o have won
         private int xWin = 0;
         private int oWin = 0;
 
+        //Storing the optimal move when MiniMax executed
         PositionCoords move = new PositionCoords();
+
+        //Keep track of whether its a player vs player or player vs AI match
+        MatchType currentMatchType;
 
         public TicTacToeForm()
         {
@@ -56,38 +65,17 @@ namespace TicTacToe___Windows_Form_Application
                                        { R3B1, R3B2, R3B3 } };
         }
 
+        #region UI Methods
         private void Button_Click(object sender, EventArgs e)
         {
-            turnNumber++;
             Button btn = (Button)sender;
 
             if (btn.Text == "")
             {
                 btn.Text = currentPlayer.ToString();
 
-                for (int i = 0; i < gameGrid.GetLength(0); i++)
-                {
-                    for (int j = 0; j < gameGrid.GetLength(1); j++)
-                    {
-                        if (gameGrid[i, j] != buttonGrid[i, j].Text)
-                        {
-                            gameGrid[i, j] = buttonGrid[i, j].Text;
-                            Console.WriteLine("CHANGED GAMEGRID VALUE: {0}{1} WITH VALUE IN: {2}", i, j, buttonGrid[i, j].Name);
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                }
-
-                WinType winCheck = WinCheck(gameGrid,false);
-                if(winCheck != WinType.None)
-                {
-                    EndGameMessage(winCheck);
-                }
-
-                SwitchPlayer();
+                UpdateGameGrid();
+                EndGameCheck();
             }
         }
 
@@ -98,20 +86,14 @@ namespace TicTacToe___Windows_Form_Application
 
         private void playerVsPlayerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            turnNumber = 0;
+            SetupGame();
+            currentMatchType = MatchType.PlayerVPlayer;
+        }
 
-            //Enable and reset buttons
-            for (int i = 0; i < buttonGrid.GetLength(0); i++)
-            {
-                for(int j = 0; j < buttonGrid.GetLength(1); j++)
-                {
-                    buttonGrid[i,j].Enabled = true;
-                    buttonGrid[i,j].Text = "";
-                }
-            }
-
-            currentPlayer = PlayerType.x;
-            TurnLabel.Text = "X";            
+        private void playerVsAIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetupGame();
+            currentMatchType = MatchType.PlayerVAI;
         }
 
         private void resetScoreToolStripMenuItem_Click(object sender, EventArgs e)
@@ -121,17 +103,55 @@ namespace TicTacToe___Windows_Form_Application
             xWin = 0;
             oWin = 0;
         }
+        #endregion
 
         #region Custom Methods
+        /// <summary>
+        /// Functions to check that the text in the Form Buttons matches what's in the 2D string array
+        /// </summary>
+        private void UpdateGameGrid()
+        {
+            for (int i = 0; i < gameGrid.GetLength(0); i++)
+            {
+                for (int j = 0; j < gameGrid.GetLength(1); j++)
+                {
+                    if (gameGrid[i, j] != buttonGrid[i, j].Text)
+                    {
+                        gameGrid[i, j] = buttonGrid[i, j].Text;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+
+        private void SetupGame()
+        {
+            for (int i = 0; i < buttonGrid.GetLength(0); i++)
+            {
+                for (int j = 0; j < buttonGrid.GetLength(1); j++)
+                {
+                    buttonGrid[i, j].Enabled = true;
+                    buttonGrid[i, j].Text = "";
+                }
+            }
+
+            currentPlayer = PlayerType.x;
+            TurnLabel.Text = "X";
+        }
+
         private void SwitchPlayer()
         {
             if(currentPlayer == PlayerType.x)
             {
                 currentPlayer = PlayerType.o;
                 TurnLabel.Text = "o";
-                MiniMax();
-                //gameGrid[move.Row, move.Column] = currentPlayer.ToString();
-                SwitchPlayer();
+                if(currentMatchType == MatchType.PlayerVAI)
+                {
+                    BestMove();
+                }                
             }
             else
             {
@@ -140,9 +160,15 @@ namespace TicTacToe___Windows_Form_Application
             }
         }
 
+        /// <summary>
+        /// Used to check if game 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         private bool WinBoolCheck(PlayerType player)
         {
-            for(int i = 0; i < 3; i++)
+            #region Horizontal + Vertical Win Checks
+            for (int i = 0; i < 3; i++)
             {
                 if(gameGrid[i,0] == player.ToString() && gameGrid[i,1] == player.ToString() && gameGrid[i,2] == player.ToString())
                 {
@@ -154,8 +180,10 @@ namespace TicTacToe___Windows_Form_Application
                     return true;
                 }
             }
+            #endregion
 
-            if(gameGrid[0,0] == player.ToString() && gameGrid[1,1] == player.ToString() && gameGrid[2,2] == player.ToString())
+            #region Diagonal Win Checks
+            if (gameGrid[0,0] == player.ToString() && gameGrid[1,1] == player.ToString() && gameGrid[2,2] == player.ToString())
             {
                 return true;
             }
@@ -163,133 +191,73 @@ namespace TicTacToe___Windows_Form_Application
             {
                 return true;
             }
+            #endregion
 
             return false;
         }
 
+        /// <summary>
+        /// Check to see if the game has ended in a tie
+        /// </summary>
+        /// <returns></returns>
         private bool IsTie()
         {
+            //Iterate through each row, seeing if there are any spaces free
             for (int i = 0; i < 3; i++)
             {
                 if (gameGrid[i, 0] == "" || gameGrid[i, 1] == "" || gameGrid[i, 2] == "")
                     return false;
             }
             return true;
-            /*if (turnNumber == 9)
-            {
-                return true;
-            }
-            return false;*/
         }
 
-        private WinType WinCheck(string[,] grid, bool minMaxCheck)
+        /// <summary>
+        /// Check to see if end game state has been reached.
+        /// Changes corresponding Windows Form components respectively.
+        /// </summary>
+        private void EndGameCheck()
         {
-            bool winner = false;
-
-            #region HorizontalChecks
-            if ((grid[0, 0] == grid[0, 1]) && (grid[0, 1] == grid[0, 2]) && grid[0, 0] != "")
+            if (WinBoolCheck(currentPlayer))
             {
-                winner = true;
-            }
-            else if ((grid[1, 0] == grid[1, 1]) && (grid[1, 1] == grid[1, 2]) && grid[1, 0] != "")
-            {
-                winner = true;
-            }
-            else if ((grid[2, 0] == grid[2, 1]) && (grid[2, 1] == grid[2, 2]) && grid[2, 0] != "")
-            {
-                winner = true;
-            }
-            #endregion
-
-            #region Vertical Checks
-            else if ((grid[0, 0] == grid[1, 0]) && (grid[1, 0] == grid[2, 0]) && grid[0, 0] != "")
-            {
-                winner = true;
-            }
-            else if ((grid[0, 1] == grid[1, 1]) && (grid[1, 1] == grid[2, 1]) && grid[0, 1] != "")
-            {
-                winner = true;
-            }
-            else if ((grid[0, 2] == grid[1, 2]) && (grid[1, 2] == grid[2, 2]) && grid[0, 2] != "")
-            {
-                winner = true;
-            }
-            #endregion
-
-            #region Diagonal Checks
-            else if ((grid[0, 0] == grid[1, 1]) && (grid[1, 1] == grid[2, 2]) && grid[0, 0] != "")
-            {
-                winner = true;
-            }
-            else if ((grid[0, 2] == grid[1, 1]) && (grid[1, 1] == grid[2, 0]) && grid[0, 2] != "")
-            {
-                winner = true;
-            }
-            #endregion
-
-            if (winner)
-            {
-                if (!minMaxCheck)
+                EndGameMessage(currentPlayer);
+                DisableButtons();
+                if (currentPlayer == PlayerType.o)
                 {
-                    DisableButtons();
-                }
-
-                if(currentPlayer == PlayerType.o)
-                {
-
-                    if (!minMaxCheck)
-                    {
-                        oWin++;
-                        OScoreLabel.Text = oWin.ToString();
-                        TurnLabel.Enabled = false;
-                    }
-                    return WinType.O;
+                    oWin++;
+                    OScoreLabel.Text = oWin.ToString();
                 }
                 else
                 {
-                    if (!minMaxCheck)
-                    {
-                        xWin++;
-                        XScoreLabel.Text = xWin.ToString();
-                        TurnLabel.Enabled = false;
-                    }
-                    return WinType.X;
-                }               
+                    xWin++;
+                    XScoreLabel.Text = xWin.ToString();
+                }
+
+            }
+            else if (IsTie())
+            {
+                DisableButtons();
+                MessageBox.Show("Draw!");
             }
             else
             {
-                if(turnNumber == 9)
-                {
-                    if (!minMaxCheck)
-                    {
-                        TurnLabel.Enabled = false;
-                    }
-                    return WinType.Draw;
-                }
+                SwitchPlayer();
             }
-
-            return WinType.None;
         }
 
-        private void EndGameMessage(WinType winType)
+        private void EndGameMessage(PlayerType playerType)
         {
-            if (winType == WinType.O)
+            if(playerType == PlayerType.x)
             {
-                MessageBox.Show("Winner: O!");
-            }
-            else if(winType == WinType.X)
-            {
-                MessageBox.Show("Winner: X!");
+                MessageBox.Show("X Wins");
             }
             else
             {
-                MessageBox.Show("Draw!");
+                MessageBox.Show("O Wins!");
             }
         }
 
         private void DisableButtons()
         {
-            //Enable and reset buttons
             for (int i = 0; i < buttonGrid.GetLength(0); i++)
             {
                 for(int j = 0; j < buttonGrid.GetLength(1); j++)
@@ -299,71 +267,12 @@ namespace TicTacToe___Windows_Form_Application
             }
         }
 
-        private /*PositionCoords*/void MiniMax()
+        /// <summary>
+        /// Function called to find the optimal move using MiniMax.
+        /// </summary>
+        private void BestMove()
         {
-            int score = 1000000;
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if(gameGrid[i,j] == "")
-                    {
-                        gameGrid[i,j] = PlayerType.o.ToString();
-
-                        int temp = MaxSearch();
-
-                        if (temp < score)
-                        {
-                            score = temp;
-                            move.Row = i;
-                            move.Column = j;
-                            Console.WriteLine("{0},{1}", move.Row, move.Column);
-                        }
-
-                        gameGrid[i, j] = "";
-                    }
-                }
-            }
-            Console.WriteLine(move.Column + " " + move.Row);
-
-            PrintGameGrid();
-            //return move;
-            gameGrid[move.Row, move.Column] = PlayerType.o.ToString();
-            buttonGrid[move.Row, move.Column].Text = PlayerType.o.ToString();
-        }
-
-        private int MaxSearch()
-        {
-            int score = -10000;
-
-            if (WinBoolCheck(PlayerType.x)){ return 10 ; }
-            else if(WinBoolCheck(PlayerType.o)){ return -10; }
-            else if (IsTie()) {return 0;}
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if(gameGrid[i,j] == "")
-                    {
-                        gameGrid[i, j] = PlayerType.x.ToString();
-                        score = Math.Max(score, MinSearch());
-                        gameGrid[i, j] = "";
-                    }
-                }
-            }
-
-            return score;
-        }
-
-        private int MinSearch()
-        {
-            int score = 10000;
-
-            if (WinBoolCheck(PlayerType.x)) { return 10; }
-            else if (WinBoolCheck(PlayerType.o)) { return -10; }
-            else if (IsTie()) { return 0; }
+            int score = 100000;
 
             for (int i = 0; i < 3; i++)
             {
@@ -372,27 +281,87 @@ namespace TicTacToe___Windows_Form_Application
                     if (gameGrid[i, j] == "")
                     {
                         gameGrid[i, j] = PlayerType.o.ToString();
-                        score = Math.Min(score, MaxSearch());
+
+                        //Call Minimax function
+                        int minimaxVal = MiniMax(0, true);
+
                         gameGrid[i, j] = "";
+
+                        if (minimaxVal < score)
+                        {
+                            score = minimaxVal;
+                            move.Row = i;
+                            move.Column = j;
+                        }
                     }
                 }
             }
 
-            return score;
+            //Add new position to the game board and the UI
+            gameGrid[move.Row, move.Column] = PlayerType.o.ToString();
+            buttonGrid[move.Row, move.Column].Text = PlayerType.o.ToString();
+
+            //Check if there is a winner after new position added
+            EndGameCheck();
         }
 
-        private void PrintGameGrid()
+        /// <summary>
+        /// Core recursive MiniMax function
+        /// </summary>
+        /// <param name="depth"></param>
+        /// <param name="isMaximising"></param>
+        /// <returns></returns>
+        private int MiniMax(int depth, bool isMaximising)
         {
-            Console.WriteLine("+------------+");
-            for(int i = 0; i < 3; i++)
+            //Check if a player has won at the start of each function call
+            if (WinBoolCheck(PlayerType.x)) { return 10; }
+            else if (WinBoolCheck(PlayerType.o)) { return -10; }
+            else if (IsTie()) { return 0; }
+
+            //Maximising Player (Human) - Trying to reach the largest possible score
+            if (isMaximising)
             {
-                for (int j = 0; j < 3; j++)
+                int best = -10000;
+
+                for(int i = 0; i < 3; i++)
                 {
-                    Console.Write(gameGrid[i,j] + " ");
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if(gameGrid[i,j] == "")
+                        {
+                            gameGrid[i, j] = PlayerType.x.ToString();
+
+                            best = Math.Max(best, MiniMax(depth + 1, false));
+
+                            gameGrid[i, j] = "";
+                        }
+                    }
                 }
-                Console.WriteLine("");
+
+                return best;
             }
-            Console.WriteLine("+------------+");
+            //Minimising player (AI) - trying to reach the minimal score
+            else
+            {
+                int best = 10000;
+
+                for(int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if(gameGrid[i,j] == "")
+                        {
+                            gameGrid[i, j] = PlayerType.o.ToString();
+
+                            best = Math.Min(best, MiniMax(depth + 1, true));
+
+                            gameGrid[i, j] = "";
+                        }
+                    }
+                }
+
+                return best;
+            }
         }
 
         #endregion
