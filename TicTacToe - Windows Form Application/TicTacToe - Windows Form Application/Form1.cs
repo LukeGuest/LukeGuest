@@ -71,11 +71,7 @@ namespace TicTacToe___Windows_Form_Application
             }
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
+        #region File Menu Toolstrip
         private void playerVsPlayerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetupGame();
@@ -95,6 +91,27 @@ namespace TicTacToe___Windows_Form_Application
             xWin = 0;
             oWin = 0;
         }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+        #endregion
+
+        #region Help Menu Toolstrip
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("A TicTacToe game created by Luke Guest!");
+        }
+
+        private void gettingStartedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("To begin a game you need to select File > New Game > Player vs Player/Player vs AI\n" +
+                "You can either play the game in the 2 player mode, or against an AI that's impossible to beat!\n");
+        }
+
+        #endregion
+
         #endregion
 
         #region Custom Methods
@@ -280,7 +297,7 @@ namespace TicTacToe___Windows_Form_Application
                         gameGrid[i, j] = PlayerType.o.ToString();
 
                         //Call Minimax function
-                        int minimaxVal = MiniMaxAlphaBeta(0, true);
+                        int minimaxVal = MiniMax(0, true);
 
                         gameGrid[i, j] = "";
 
@@ -368,7 +385,7 @@ namespace TicTacToe___Windows_Form_Application
         /// <param name="alpha"></param>
         /// <param name="beta"></param>
         /// <returns></returns>
-        private int MiniMaxAlphaBeta(int depth, bool isMaximising, int alpha = -10000, int beta = 10000)
+        private int MiniMax(int depth, bool isMaximising, int alpha = -10000, int beta = 10000)
         {
             //Check if a player has won at the start of each function call
             if (WinBoolCheck(PlayerType.x)) { return 10; }
@@ -388,13 +405,13 @@ namespace TicTacToe___Windows_Form_Application
                         {
                             gameGrid[i, j] = PlayerType.x.ToString();
 
-                            int recursiveCall = MiniMaxAlphaBeta(depth + 1, false, alpha, beta);
+                            int miniMaxCall = MiniMax(depth + 1, false, alpha, beta);
 
-                            best = Math.Max(best, recursiveCall);
+                            best = Math.Max(best, miniMaxCall);
 
                             gameGrid[i, j] = "";
 
-                            alpha = Math.Max(alpha, recursiveCall);
+                            alpha = Math.Max(alpha, miniMaxCall);
 
                             if(beta <= alpha)
                             {
@@ -404,7 +421,7 @@ namespace TicTacToe___Windows_Form_Application
                     }
                 }
 
-                return best - depth;
+                return best /*- depth*/;
             }
             //Minimising player (AI) - trying to reach the minimal score
             else
@@ -419,13 +436,13 @@ namespace TicTacToe___Windows_Form_Application
                         {
                             gameGrid[i, j] = PlayerType.o.ToString();
 
-                            int recursiveCall = MiniMaxAlphaBeta(depth + 1, true, alpha, beta);
+                            int miniMaxCall = MiniMax(depth + 1, true, alpha, beta);
 
-                            best = Math.Min(best, recursiveCall);
+                            best = Math.Min(best, miniMaxCall);
 
                             gameGrid[i, j] = "";
 
-                            beta = Math.Min(beta, recursiveCall);
+                            beta = Math.Min(beta, miniMaxCall);
 
                             if(alpha >= beta)
                             {
@@ -435,10 +452,9 @@ namespace TicTacToe___Windows_Form_Application
                     }
                 }
 
-                return best + depth;
+                return best /*+ depth*/;
             }
         }
-
         #endregion
     }
 }
