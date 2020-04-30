@@ -16,18 +16,12 @@ namespace TicTacToe___Windows_Form_Application
         PlayerVAI
     }
 
+    //Human is always player X
+    //AI is always player O
     public enum PlayerType
     {
         x,
-        o,
-    }
-
-    public enum WinType
-    {
-        X,
-        O,
-        Draw,
-        None
+        o, 
     }
 
     public partial class TicTacToeForm : Form
@@ -49,8 +43,6 @@ namespace TicTacToe___Windows_Form_Application
         private int xWin = 0;
         private int oWin = 0;
 
-        //Storing the optimal move when MiniMax executed
-        PositionCoords move = new PositionCoords();
 
         //Keep track of whether its a player vs player or player vs AI match
         MatchType currentMatchType;
@@ -127,6 +119,9 @@ namespace TicTacToe___Windows_Form_Application
             }
         }
 
+        /// <summary>
+        /// Resets variables ready for new game to commence
+        /// </summary>
         private void SetupGame()
         {
             for (int i = 0; i < buttonGrid.GetLength(0); i++)
@@ -161,7 +156,7 @@ namespace TicTacToe___Windows_Form_Application
         }
 
         /// <summary>
-        /// Used to check if game 
+        /// Used to check if game has ended.
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
@@ -272,6 +267,8 @@ namespace TicTacToe___Windows_Form_Application
         /// </summary>
         private void BestMove()
         {
+            //Storing the optimal move when MiniMax executed
+            PositionCoords move = new PositionCoords();
             int score = 100000;
 
             for (int i = 0; i < 3; i++)
@@ -283,7 +280,7 @@ namespace TicTacToe___Windows_Form_Application
                         gameGrid[i, j] = PlayerType.o.ToString();
 
                         //Call Minimax function
-                        int minimaxVal = MiniMax(0, true);
+                        int minimaxVal = MiniMaxAlphaBeta(0, true);
 
                         gameGrid[i, j] = "";
 
@@ -338,7 +335,7 @@ namespace TicTacToe___Windows_Form_Application
                     }
                 }
 
-                return best;
+                return best - depth;
             }
             //Minimising player (AI) - trying to reach the minimal score
             else
@@ -360,7 +357,85 @@ namespace TicTacToe___Windows_Form_Application
                     }
                 }
 
-                return best;
+                return best + depth;
+            }
+        }
+        /// <summary>
+        /// Core Minimax algorithm with Alpha Beta pruning
+        /// </summary>
+        /// <param name="depth"></param>
+        /// <param name="isMaximising"></param>
+        /// <param name="alpha"></param>
+        /// <param name="beta"></param>
+        /// <returns></returns>
+        private int MiniMaxAlphaBeta(int depth, bool isMaximising, int alpha = -10000, int beta = 10000)
+        {
+            //Check if a player has won at the start of each function call
+            if (WinBoolCheck(PlayerType.x)) { return 10; }
+            else if (WinBoolCheck(PlayerType.o)) { return -10; }
+            else if (IsTie()) { return 0; }
+
+            //Maximising Player (Human) - Trying to reach the largest possible score
+            if (isMaximising)
+            {
+                int best = -10000;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (gameGrid[i, j] == "")
+                        {
+                            gameGrid[i, j] = PlayerType.x.ToString();
+
+                            int recursiveCall = MiniMaxAlphaBeta(depth + 1, false, alpha, beta);
+
+                            best = Math.Max(best, recursiveCall);
+
+                            gameGrid[i, j] = "";
+
+                            alpha = Math.Max(alpha, recursiveCall);
+
+                            if(beta <= alpha)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return best - depth;
+            }
+            //Minimising player (AI) - trying to reach the minimal score
+            else
+            {
+                int best = 10000;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (gameGrid[i, j] == "")
+                        {
+                            gameGrid[i, j] = PlayerType.o.ToString();
+
+                            int recursiveCall = MiniMaxAlphaBeta(depth + 1, true, alpha, beta);
+
+                            best = Math.Min(best, recursiveCall);
+
+                            gameGrid[i, j] = "";
+
+                            beta = Math.Min(beta, recursiveCall);
+
+                            if(alpha >= beta)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return best + depth;
             }
         }
 
